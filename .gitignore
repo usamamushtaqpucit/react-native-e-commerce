@@ -1,0 +1,20 @@
+easy-shop/node_modules/
+easy-shop/.expo/
+easy-shop/dist/
+easy-shop/npm-debug.*
+easy-shop/*.jks
+easy-shop/*.p8
+easy-shop/*.p12
+easy-shop/*.key
+easy-shop/*.mobileprovision
+easy-shop/*.orig.*
+easy-shop/web-build/
+easy-shop/.prettierrc
+
+backend/node_modules/
+backend/.env
+backend/.prettierrc
+
+
+# macOS
+.DS_Store
