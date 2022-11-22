@@ -1,7 +1,7 @@
 [
     {
         "_id": {
-            "$oid": "5f15d8852a025143f9593a7c"
+            "$oid": "5f15d8852a025143f9593a7c1"
         },
         "image": "should be some path",
         "brand": "PS3",
@@ -19,7 +19,7 @@
     },
     {
         "_id": {
-            "$oid": "5f15d92ee520d44421ed8e9b"
+            "$oid": "5f15d92ee520d44421ed8e9b2"
         },
         "image": "should be some path",
         "brand": "IKEA",
@@ -37,7 +37,7 @@
     },
     {
         "_id": {
-            "$oid": "5f15d964e520d44421ed8e9c"
+            "$oid": "5f15d964e520d44421ed8e9c3"
         },
         "image": "should be some path",
         "brand": "OBI",
@@ -55,7 +55,7 @@
     },
     {
         "_id": {
-            "$oid": "5f15d9b3e520d44421ed8e9d"
+            "$oid": "5f15d9b3e520d44421ed8e9d4"
         },
         "image": "should be some path",
         "brand": "OBI",
@@ -73,7 +73,7 @@
     },
     {
         "_id": {
-            "$oid": "5f15da13e520d44421ed8e9e"
+            "$oid": "5f15da13e520d44421ed8e9e5"
         },
         "image": "should be some path",
         "brand": "Mobilix",
