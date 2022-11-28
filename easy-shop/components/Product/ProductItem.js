@@ -6,9 +6,21 @@ import {
   Image,
   Button,
 } from "react-native";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../store/redux/cartItem";
 
 let { width } = Dimensions.get("window");
-const ProductItem = ({ name, price, image, countInStock }) => {
+
+const ProductItem = ({ item }) => {
+  const { name, price, image, countInStock } = item;
+  const dispatch = useDispatch();
+  const addProductHandler = () => {
+    dispatch(
+      addToCart({
+        data: { id: item.id, quantity: 1, product: item },
+      })
+    );
+  };
   return (
     <View style={styles.container}>
       <Image
@@ -27,7 +39,7 @@ const ProductItem = ({ name, price, image, countInStock }) => {
       <Text style={styles.price}>{price}</Text>
       {countInStock > 0 ? (
         <View style={{ marginBottom: 60 }}>
-          <Button title="Add" color="green" />
+          <Button title="Add" color="green" onPress={addProductHandler} />
         </View>
       ) : (
         <Text style={{ marginTop: 60 }}>Out of stock</Text>
@@ -45,7 +57,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     marginLeft: 10,
     alignItems: "center",
-    elevation: 2,
+    elevation: 8,
     backgroundColor: "#F5F5F5",
   },
   image: {

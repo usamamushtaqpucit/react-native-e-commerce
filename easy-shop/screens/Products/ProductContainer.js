@@ -1,30 +1,76 @@
-import { useState, useEffect } from "react";
-import { StyleSheet, ActivityIndicator, View } from "react-native";
-import { Icon, Input, Text, VStack } from "native-base";
+import { useState, useEffect, useCallback } from "react";
+import {
+  StyleSheet,
+  ActivityIndicator,
+  View,
+  Dimensions,
+  Text,
+  ScrollView,
+} from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
+import axios from "axios";
+import { Icon, Input, VStack } from "native-base";
 import { Ionicons } from "@expo/vector-icons";
 import ProductList from "../../components/Product/ProductList";
-import SearchedProduct from "./SearchedProducts";
+import SearchedProducts from "./SearchedProducts";
 import Banner from "../../shared/Banner";
+import CategoryFilter from "./CategoryFilter";
+import baseURL from "../../utils/baseUrl";
 
-const data = require("../../assets/data/products.json");
+let { height } = Dimensions.get("window");
 
 const ProductContainer = () => {
   const [products, setProducts] = useState([]);
   const [productsFiltered, setProductsFiltered] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [focus, setFocus] = useState();
+  const [categories, setCategories] = useState([]);
+  const [productsCtg, setProductsCtg] = useState([]);
+  const [active, setActive] = useState();
+  const [initialState, setInitialState] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    setProducts(data);
-    setProductsFiltered(data);
-    setFocus(false);
+  useFocusEffect(
+    useCallback(() => {
+      setFocus(false);
+      setActive(-1);
 
-    return () => {
-      setProducts([]);
-      setProductsFiltered([]);
-      setFocus();
-    };
-  }, []);
+      // Products
+      axios
+        .get(`${baseURL}products`)
+        .then((res) => {
+          setProducts(res.data);
+          setProductsFiltered(res.data);
+          setProductsCtg(res.data);
+          setInitialState(res.data);
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.log(error);
+          console.log("Api call error");
+        });
+
+      // Categories
+      axios
+        .get(`${baseURL}categories`)
+        .then((res) => {
+          setCategories(res.data);
+        })
+        .catch((error) => {
+          console.log(error);
+          console.log("Api call error");
+        });
+
+      return () => {
+        setProducts([]);
+        setProductsFiltered([]);
+        setFocus();
+        setCategories([]);
+        setActive();
+        setInitialState();
+      };
+    }, [])
+  );
 
   // Product Methods
   const searchProduct = (text) => {
@@ -43,8 +89,24 @@ const ProductContainer = () => {
     setFocus(false);
   };
 
+  // Categories
+  const changeCtg = (ctg) => {
+    {
+      ctg === "all"
+        ? [setProductsCtg(initialState), setActive(true)]
+        : [
+            setProductsCtg(
+              products.filter((item) => {
+                return item.category._id === ctg;
+              }),
+              setActive(true)
+            ),
+          ];
+    }
+  };
+
   return (
-    <>
+    <ScrollView showsVerticalScrollIndicator={false}>
       <VStack my="2" space={5} w="100%" maxW="300px" alignSelf="center">
         <VStack w="100%" space={5}>
           <Input
@@ -85,22 +147,47 @@ const ProductContainer = () => {
         </VStack>
       </VStack>
       {focus == true ? (
-        <SearchedProduct productsFiltered={productsFiltered} />
+        <SearchedProducts productsFiltered={productsFiltered} />
       ) : (
         <View style={styles.productContainer}>
           <View>
             <Banner />
           </View>
-          <ProductList items={products} />
+          <View>
+            <CategoryFilter
+              categories={[
+                {
+                  name: "All",
+                  id: Math.random(),
+                },
+                ...categories,
+              ]}
+              categoryFilter={changeCtg}
+              productsCtg={productsCtg}
+              active={active}
+              setActive={setActive}
+            />
+          </View>
+          {productsCtg.length > 0 ? (
+            <ProductList items={productsCtg} />
+          ) : (
+            <View style={[styles.center, { height: height / 2 }]}>
+              <Text>No product found</Text>
+            </View>
+          )}
         </View>
       )}
-    </>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   productContainer: {
     marginBottom: 450,
+  },
+  center: {
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 export default ProductContainer;

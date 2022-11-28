@@ -1,22 +1,17 @@
-import { useState, useEffect } from "react";
 import {
   StyleSheet,
   TouchableOpacity,
   Text,
   View,
-  FlatList,
   Dimensions,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import ProductItem from "./ProductItem";
 
+const { width } = Dimensions.get("window");
+
 const ProductList = ({ items }) => {
-  const renderProductItem = ({ item }) => {
-    return (
-      <TouchableOpacity>
-        <ProductItem {...item} />
-      </TouchableOpacity>
-    );
-  };
+  const navigation = useNavigation();
 
   if (items.length < 1) {
     return (
@@ -25,17 +20,29 @@ const ProductList = ({ items }) => {
       </View>
     );
   }
+
   return (
-    <View>
-      <FlatList
-        numColumns={2}
-        data={items}
-        keyExtractor={(item) => item.name}
-        renderItem={renderProductItem}
-        showsVerticalScrollIndicator={false}
-      />
+    <View style={styles.listContainer}>
+      {items.map((item) => (
+        <TouchableOpacity
+          key={item.id}
+          onPress={() => navigation.navigate("Product Detail", { item: item })}
+        >
+          <ProductItem item={item} />
+        </TouchableOpacity>
+      ))}
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  listContainer: {
+    flex: 1,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    alignItems: "flex-start",
+    marginLeft: 4,
+  },
+});
 
 export default ProductList;
