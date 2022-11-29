@@ -9,7 +9,7 @@ const SearchedProducts = ({ productsFiltered }) => {
     <>
       {productsFiltered.length > 0 ? (
         productsFiltered.map((product) => (
-          <SearchedProduct key={product.name} item={product} />
+          <SearchedProduct key={product.id} item={product} />
         ))
       ) : (
         <View style={styles.center}>

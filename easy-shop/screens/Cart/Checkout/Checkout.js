@@ -50,6 +50,7 @@ const Checkout = () => {
       viewIsInsideTabBar={true}
       extraHeight={200}
       enableOnAndroid={true}
+      showsVerticalScrollIndicator={false}
     >
       <FormContainer title={"Shipping Address"}>
         <Input
@@ -84,7 +85,7 @@ const Checkout = () => {
           keyboardType={"numeric"}
           onChangeText={(text) => setZip(text)}
         />
-        <Box style={styles.countryDropdownContainer}>
+        <View style={styles.countryDropdownContainer}>
           <Select
             style={styles.countryDropdown}
             selectedValue={country}
@@ -103,7 +104,7 @@ const Checkout = () => {
               <Select.Item key={c.code} label={c.name} value={c.name} />
             ))}
           </Select>
-        </Box>
+        </View>
         <View style={styles.button}>
           <Button title="Next" onPress={() => checkOut()} />
         </View>
@@ -117,12 +118,12 @@ const styles = StyleSheet.create({
     width: "80%",
   },
   countryDropdown: {
-    height: 60,
+    height: 50,
     backgroundColor: "white",
-    borderRadius: 20,
+    borderRadius: 5,
     padding: 10,
-    borderWidth: 2,
-    borderColor: "orange",
+    borderWidth: 1,
+    borderColor: "#5cb85c",
     fontSize: 16,
   },
   button: {

@@ -5,7 +5,9 @@ import {
   Dimensions,
   Image,
   Button,
+  Platform,
 } from "react-native";
+import Toast from "react-native-toast-message";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../store/redux/cartItem";
 
@@ -20,6 +22,13 @@ const ProductItem = ({ item }) => {
         data: { id: item.id, quantity: 1, product: item },
       })
     );
+
+    Toast.show({
+      topOffset: 60,
+      type: "success",
+      text1: `${name} added to Cart`,
+      text2: "Go to your cart to complete order",
+    });
   };
   return (
     <View style={styles.container}>
@@ -58,7 +67,10 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     alignItems: "center",
     elevation: 8,
-    backgroundColor: "#F5F5F5",
+    backgroundColor: Platform.select({
+      ios: "#dddddd",
+      android: "#F5F5F5",
+    }),
   },
   image: {
     width: width / 2 - 30,

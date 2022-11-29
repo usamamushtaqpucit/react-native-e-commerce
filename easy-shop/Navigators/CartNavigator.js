@@ -9,7 +9,7 @@ const CartNavigator = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="Cart"
+        name="MyCart"
         component={Cart}
         options={{
           headerShown: false,

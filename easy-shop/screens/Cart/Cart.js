@@ -57,9 +57,7 @@ const Cart = () => {
             id={item.id}
           />
         )}
-        keyExtractor={(item, index) =>
-          (item.name + Math.random() + index).toString()
-        }
+        keyExtractor={(item) => item.id}
         renderHiddenItem={({ item }) => (
           <View style={styles.hiddenContainer}>
             <TouchableOpacity

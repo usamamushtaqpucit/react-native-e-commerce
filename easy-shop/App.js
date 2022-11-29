@@ -6,6 +6,7 @@ import Header from "./shared/Header";
 import Main from "./Navigators/Main";
 import { Provider } from "react-redux";
 import { store } from "./store/store";
+import Toast from "react-native-toast-message";
 
 LogBox.ignoreAllLogs(true);
 
@@ -17,6 +18,7 @@ export default function App() {
           <StatusBar style="auto" />
           <Header />
           <Main />
+          <Toast />
         </NativeBaseProvider>
       </NavigationContainer>
     </Provider>

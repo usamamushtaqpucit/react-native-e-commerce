@@ -1,20 +1,35 @@
 import React, { useState } from "react";
-import {
-  Image,
-  View,
-  StyleSheet,
-  Text,
-  ScrollView,
-  Button,
-} from "react-native";
+import { Image, View, StyleSheet, Text, ScrollView } from "react-native";
+import { useDispatch } from "react-redux";
+import EasyButton from "../../shared/StyledComponents/EasyButton";
+import { addToCart } from "../../store/redux/cartItem";
+import Toast from "react-native-toast-message";
 
 const SingleProduct = ({ route }) => {
   const [item, setItem] = useState(route.params.item);
-  const [availability, setAvailability] = useState(null);
+  const [availability, setAvailability] = useState("");
+  const dispatch = useDispatch();
+  const addProductHandler = () => {
+    dispatch(
+      addToCart({
+        data: { id: item.id, quantity: 1, product: item },
+      })
+    );
+
+    Toast.show({
+      topOffset: 60,
+      type: "success",
+      text1: `${item.name} added to Cart`,
+      text2: "Go to your cart to complete order",
+    });
+  };
 
   return (
     <View style={styles.container}>
-      <ScrollView style={{ marginBottom: 80, padding: 5 }}>
+      <ScrollView
+        style={styles.innerContainer}
+        showsVerticalScrollIndicator={false}
+      >
         <View>
           <Image
             source={{
@@ -43,23 +58,9 @@ const SingleProduct = ({ route }) => {
           <Text style={styles.price}>$ {item.price}</Text>
         </View>
         <View style={styles.button}>
-          <Button title="Add" color="green" />
-          {/* <EasyButton
-            primary
-            medium
-            onPress={() => {
-              props.addItemToCart(item.id),
-                Toast.show({
-                  topOffset: 60,
-                  type: "success",
-                  text1: `${item.name} added to Cart`,
-                  text2: "Go to your cart to complete order",
-                });
-            }}
-          >
-            <Text style={{ color:
-                 "white" }}>Add</Text>
-          </EasyButton> */}
+          <EasyButton primary medium onPress={addProductHandler}>
+            <Text style={{ color: "white" }}>Add</Text>
+          </EasyButton>
         </View>
       </View>
     </View>
@@ -71,6 +72,12 @@ const styles = StyleSheet.create({
     position: "relative",
     height: "100%",
     paddingTop: 50,
+    maxWidth: "90%",
+    alignSelf: "center",
+  },
+  innerContainer: {
+    marginBottom: 5,
+    padding: 5,
   },
   imageContainer: {
     backgroundColor: "white",

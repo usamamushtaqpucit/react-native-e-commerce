@@ -1,11 +1,4 @@
-import {
-  View,
-  StyleSheet,
-  Dimensions,
-  ScrollView,
-  Button,
-  ActivityIndicator,
-} from "react-native";
+import { View, StyleSheet, Dimensions, ScrollView, Button } from "react-native";
 import { Center, Text } from "native-base";
 import { useDispatch } from "react-redux";
 import SearchedProduct from "../../../components/Product/SearchedProduct";
@@ -31,45 +24,34 @@ const Confirm = ({ route, navigation }) => {
   }
 
   return (
-    <>
-      {loading == false ? (
-        <ScrollView contentContainerStyle={styles.container}>
-          <View style={styles.titleContainer}>
-            <Text style={{ fontSize: 20, fontWeight: "bold" }}>
-              Confirm Order
-            </Text>
+    <ScrollView contentContainerStyle={styles.container}>
+      <View style={styles.titleContainer}>
+        <Text style={{ fontSize: 20, fontWeight: "bold" }}>Confirm Order</Text>
 
-            <View style={styles.innerContainer}>
-              <Text style={styles.title}>Shipping to:</Text>
-              <View style={{ padding: 8 }}>
-                <Text>Address: {order.shippingAddress1}</Text>
-                <Text>Address2: {order.shippingAddress2}</Text>
-                <Text>City: {order.city}</Text>
-                <Text>Zip Code: {order.zip}</Text>
-                <Text>Country: {order.country}</Text>
-              </View>
-              <Text style={styles.title}>Items:</Text>
-              <>
-                {order &&
-                  JSON.parse(order?.orderItems).map((item) => (
-                    <View style={styles.listItem}>
-                      <SearchedProduct item={item.product} />
-                    </View>
-                  ))}
-              </>
-            </View>
-            <View style={{ alignItems: "center", margin: 20 }}>
-              <Button title={"Place order"} onPress={placeOrder} />
-            </View>
+        <View style={styles.innerContainer}>
+          <Text style={styles.title}>Shipping to:</Text>
+          <View style={{ padding: 8 }}>
+            <Text>Address: {order.shippingAddress1}</Text>
+            <Text>Address2: {order.shippingAddress2}</Text>
+            <Text>City: {order.city}</Text>
+            <Text>Zip Code: {order.zip}</Text>
+            <Text>Country: {order.country}</Text>
           </View>
-        </ScrollView>
-      ) : (
-        // Loading
-        <View style={[styles.center, { backgroundColor: "#f2f2f2" }]}>
-          <ActivityIndicator size="large" color="red" />
+          <Text style={styles.title}>Items:</Text>
+          <>
+            {order &&
+              JSON.parse(order?.orderItems).map((item) => (
+                <View key={item.id} style={styles.listItem}>
+                  <SearchedProduct item={item.product} />
+                </View>
+              ))}
+          </>
         </View>
-      )}
-    </>
+        <View style={{ alignItems: "center", margin: 20 }}>
+          <Button title={"Place order"} onPress={placeOrder} />
+        </View>
+      </View>
+    </ScrollView>
   );
 };
 

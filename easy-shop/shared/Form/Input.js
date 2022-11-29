@@ -1,33 +1,54 @@
-import React from "react";
-import { TextInput, StyleSheet } from "react-native";
+import { TextInput, StyleSheet, View } from "react-native";
+import Error from "../Error";
 
-const Input = (props) => {
+const Input = ({
+  placeholder,
+  name,
+  id,
+  value,
+  autoCorrect,
+  onChangeText,
+  onFocus,
+  secureTextEntry,
+  keyboardType,
+  isInvalid,
+  errorMessage,
+}) => {
   return (
-    <TextInput
-      style={styles.input}
-      placeholder={props.placeholder}
-      name={props.name}
-      id={props.id}
-      value={props.value}
-      autoCorrect={props.autoCorrect}
-      onChangeText={props.onChangeText}
-      onFocus={props.onFocus}
-      secureTextEntry={props.secureTextEntry}
-      keyboardType={props.keyboardType}
-    ></TextInput>
+    <>
+      <TextInput
+        style={[styles.input, isInvalid ? { borderColor: "red" } : null]}
+        placeholder={placeholder}
+        name={name}
+        id={id}
+        value={value}
+        autoCorrect={autoCorrect}
+        onChangeText={onChangeText}
+        onFocus={onFocus}
+        secureTextEntry={secureTextEntry}
+        keyboardType={keyboardType}
+      ></TextInput>
+      <View style={styles.error}>
+        {isInvalid ? <Error message={errorMessage} /> : null}
+      </View>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
   input: {
     width: "80%",
-    height: 60,
+    height: 50,
     backgroundColor: "white",
-    margin: 10,
-    borderRadius: 20,
+    margin: 5,
+    borderRadius: 5,
     padding: 10,
-    borderWidth: 2,
-    borderColor: "orange",
+    borderWidth: 1,
+    borderColor: "#5cb85c",
+  },
+  error: {
+    alignSelf: "flex-start",
+    marginLeft: "10%",
   },
 });
 

@@ -4,6 +4,7 @@ import Icon from "@expo/vector-icons/FontAwesome";
 import HomeNavigator from "./HomeNavigator";
 import CartIcon from "../shared/CartIcon";
 import CartNavigator from "./CartNavigator";
+import UserNavigator from "./UserNavigator";
 
 const Tab = createBottomTabNavigator();
 
@@ -11,11 +12,11 @@ const Main = () => {
   return (
     <Tab.Navigator
       initialRouteName="Home"
-      tabBarOptions={{
-        keyboardHidesTabBar: true,
-        showLabel: false,
-        activeTintColor: "#e91e63",
-      }}
+      // tabBarOptions={{
+      //   keyboardHidesTabBar: true,
+      //   showLabel: false,
+      //   activeTintColor: "#e91e63",
+      // }}
     >
       <Tab.Screen
         name="Home"
@@ -54,7 +55,7 @@ const Main = () => {
 
       <Tab.Screen
         name="User"
-        component={HomeNavigator}
+        component={UserNavigator}
         options={{
           headerShown: false,
           tabBarIcon: ({ color }) => (
