@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import Toast from "react-native-toast-message";
 import { useDispatch } from "react-redux";
+import EasyButton from "../../shared/StyledComponents/EasyButton";
 import { addToCart } from "../../store/redux/cartItem";
 
 let { width } = Dimensions.get("window");
@@ -45,24 +46,38 @@ const ProductItem = ({ item }) => {
       <Text style={styles.title}>
         {name.length > 15 ? name.substring(0, 15 - 3) + "..." : name}
       </Text>
-      <Text style={styles.price}>{price}</Text>
+      <Text style={styles.price}>$ {price}</Text>
       {countInStock > 0 ? (
         <View style={{ marginBottom: 60 }}>
-          <Button title="Add" color="green" onPress={addProductHandler} />
+          <EasyButton
+            primary
+            medium
+            onPress={() => {
+              props.addItemToCart(props.id),
+                Toast.show({
+                  topOffset: 60,
+                  type: "success",
+                  text1: `${name} added to Cart`,
+                  text2: "Go to your cart to complete order",
+                });
+            }}
+          >
+            <Text style={{ color: "white" }}>Add</Text>
+          </EasyButton>
         </View>
       ) : (
-        <Text style={{ marginTop: 60 }}>Out of stock</Text>
+        <Text style={{ marginTop: 20 }}>Currently Unavailable</Text>
       )}
     </View>
   );
 };
 const styles = StyleSheet.create({
   container: {
-    width: width / 2 - 20,
+    width: width / 2 - 30,
     height: width / 1.7,
     padding: 10,
     borderRadius: 10,
-    marginTop: 55,
+    marginTop: 10,
     marginBottom: 5,
     marginLeft: 10,
     alignItems: "center",
@@ -73,11 +88,11 @@ const styles = StyleSheet.create({
     }),
   },
   image: {
-    width: width / 2 - 30,
-    height: width / 2 - 50,
+    width: width / 3 - 30,
+    height: width / 3 - 50,
     backgroundColor: "transparent",
     position: "absolute",
-    top: -45,
+    marginTop: 10,
   },
   card: {
     marginBottom: 10,
@@ -93,7 +108,7 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 20,
     color: "orange",
-    marginTop: 10,
+    marginVertical: 5,
   },
 });
 

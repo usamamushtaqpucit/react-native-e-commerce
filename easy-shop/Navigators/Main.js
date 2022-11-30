@@ -1,14 +1,18 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { View } from "react-native";
+import { useSelector } from "react-redux";
 import Icon from "@expo/vector-icons/FontAwesome";
 import HomeNavigator from "./HomeNavigator";
 import CartIcon from "../shared/CartIcon";
 import CartNavigator from "./CartNavigator";
 import UserNavigator from "./UserNavigator";
+import AdminNavigator from "./AdminNavigator";
 
 const Tab = createBottomTabNavigator();
 
 const Main = () => {
+  const currentUser = useSelector((state) => state.auth.currentUser);
+
   return (
     <Tab.Navigator
       initialRouteName="Home"
@@ -42,16 +46,18 @@ const Main = () => {
         }}
       />
 
-      <Tab.Screen
-        name="Admin"
-        component={HomeNavigator}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({ color }) => (
-            <Icon name="cog" color={color} size={30} />
-          ),
-        }}
-      />
+      {currentUser?.user?.isAdmin == true ? (
+        <Tab.Screen
+          name="Admin"
+          component={AdminNavigator}
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ color }) => (
+              <Icon name="cog" color={color} size={30} />
+            ),
+          }}
+        />
+      ) : null}
 
       <Tab.Screen
         name="User"

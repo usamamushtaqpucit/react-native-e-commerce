@@ -1,13 +1,16 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import { Image, View, StyleSheet, Text, ScrollView } from "react-native";
 import { useDispatch } from "react-redux";
 import EasyButton from "../../shared/StyledComponents/EasyButton";
 import { addToCart } from "../../store/redux/cartItem";
 import Toast from "react-native-toast-message";
+import TrafficLight from "../../shared/StyledComponents/TrafficLight";
 
 const SingleProduct = ({ route }) => {
   const [item, setItem] = useState(route.params.item);
   const [availability, setAvailability] = useState("");
+  const [availabilityText, setAvailabilityText] = useState("");
+
   const dispatch = useDispatch();
   const addProductHandler = () => {
     dispatch(
@@ -23,6 +26,24 @@ const SingleProduct = ({ route }) => {
       text2: "Go to your cart to complete order",
     });
   };
+
+  useEffect(() => {
+    if (route.params.item.countInStock == 0) {
+      setAvailability(<TrafficLight unavailable></TrafficLight>);
+      setAvailabilityText("Unvailable");
+    } else if (route.params.item.countInStock <= 5) {
+      setAvailability(<TrafficLight limited></TrafficLight>);
+      setAvailabilityText("Limited Stock");
+    } else {
+      setAvailability(<TrafficLight available></TrafficLight>);
+      setAvailabilityText("Available");
+    }
+
+    return () => {
+      setAvailability(null);
+      setAvailabilityText("");
+    };
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -47,7 +68,10 @@ const SingleProduct = ({ route }) => {
         </View>
         <View style={styles.availabilityContainer}>
           <View style={styles.availability}>
-            <Text style={{ marginRight: 10 }}>Availability: 1233</Text>
+            <Text style={{ marginRight: 4 }}>
+              Availability: {availabilityText}
+            </Text>
+            <Text style={{ marginTop: 4 }}>{availability}</Text>
           </View>
           <Text>{item.description}</Text>
         </View>

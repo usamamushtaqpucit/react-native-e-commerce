@@ -48,3 +48,9 @@ mongoose
 app.listen(3000, () => {
     console.log('server is running http://localhost:3000');
 });
+
+//production
+var server = app.listen(process.env.PORT || 3000, () => {
+    var port = server.address().port;
+    console.log('server is running on port: ', port);
+});

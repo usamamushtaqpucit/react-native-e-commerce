@@ -8,7 +8,6 @@ export const httpLoginUser = async (user) => {
       "Content-Type": "application/json",
     },
   });
-  console.log(response.status);
   return response;
 };
 

@@ -10,6 +10,7 @@ const CategoryFilter = ({ categories, categoryFilter, setActive, active }) => {
         keyExtractor={(item) => item.id}
         bounces={true}
         horizontal={true}
+        showsHorizontalScrollIndicator={false}
         renderItem={({ item }) => {
           if (item.name == "All") {
             return (

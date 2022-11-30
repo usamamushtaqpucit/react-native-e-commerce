@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     alignItems: "flex-start",
-    marginLeft: 4,
+    marginLeft: 12,
   },
 });
 
