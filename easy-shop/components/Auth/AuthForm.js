@@ -293,8 +293,8 @@ const AuthForm = ({ isRegister }) => {
             secondary
             onPress={() =>
               isRegister
-                ? navigation.navigate("Login")
-                : navigation.navigate("Register")
+                ? navigation.replace("Login")
+                : navigation.replace("Register")
             }
           >
             <Text style={{ color: "white" }}>

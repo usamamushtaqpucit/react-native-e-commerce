@@ -36,7 +36,7 @@ router.post('/', async (req, res) => {
         req.body.orderItems.map(async (orderItem) => {
             let newOrderItem = new OrderItem({
                 quantity: orderItem.quantity,
-                product: orderItem.product,
+                product: orderItem.product.id,
             });
 
             newOrderItem = await newOrderItem.save();
@@ -90,7 +90,7 @@ router.put('/:id', async (req, res) => {
     if (!order) return res.status(400).send('the order cannot be update!');
 
     res.send(order);
-});
+}); 
 
 router.delete('/:id', (req, res) => {
     Order.findByIdAndRemove(req.params.id)

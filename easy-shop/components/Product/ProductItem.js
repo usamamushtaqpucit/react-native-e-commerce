@@ -4,7 +4,6 @@ import {
   View,
   Dimensions,
   Image,
-  Button,
   Platform,
 } from "react-native";
 import Toast from "react-native-toast-message";
@@ -49,19 +48,7 @@ const ProductItem = ({ item }) => {
       <Text style={styles.price}>$ {price}</Text>
       {countInStock > 0 ? (
         <View style={{ marginBottom: 60 }}>
-          <EasyButton
-            primary
-            medium
-            onPress={() => {
-              props.addItemToCart(props.id),
-                Toast.show({
-                  topOffset: 60,
-                  type: "success",
-                  text1: `${name} added to Cart`,
-                  text2: "Go to your cart to complete order",
-                });
-            }}
-          >
+          <EasyButton primary medium onPress={addProductHandler}>
             <Text style={{ color: "white" }}>Add</Text>
           </EasyButton>
         </View>

@@ -2,9 +2,9 @@ import styled, { css } from "styled-components";
 
 const TrafficLight = styled.View`
   border-radius: 50px;
-  width: 10px;
-  height: 10px;
-  padding: 10px;
+  width: 4px;
+  height: 5px;
+  padding: 5px;
 
   ${(props) =>
     props.available &&

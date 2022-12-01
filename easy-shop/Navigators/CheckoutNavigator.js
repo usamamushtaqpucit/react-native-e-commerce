@@ -8,7 +8,7 @@ const Tab = createMaterialTopTabNavigator();
 
 const CheckoutNavigator = () => {
   return (
-    <Tab.Navigator screenOptions={{swipeEnabled: false}}>
+    <Tab.Navigator>
       <Tab.Screen name="Shipping" component={Checkout} />
       <Tab.Screen name="Payment" component={Payment} />
       <Tab.Screen name="Confirm" component={Confirm} />

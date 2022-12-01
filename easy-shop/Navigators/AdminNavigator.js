@@ -19,7 +19,13 @@ const AdminNavigator = () => {
       />
       <Stack.Screen name="Categories" component={Categories} />
       <Stack.Screen name="Orders" component={Orders} />
-      <Stack.Screen name="ProductForm" component={ProductForm} />
+      <Stack.Screen
+        name="ProductForm"
+        component={ProductForm}
+        options={{
+          title: null,
+        }}
+      />
     </Stack.Navigator>
   );
 };

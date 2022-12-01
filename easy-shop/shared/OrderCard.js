@@ -83,9 +83,7 @@ const OrderCard = (props) => {
             text1: "Order Edited",
             text2: "",
           });
-          setTimeout(() => {
-            props.navigation.navigate("Products");
-          }, 500);
+          props.navigation.navigate("Products");
         }
       })
       .catch((error) => {

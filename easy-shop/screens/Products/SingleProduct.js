@@ -71,7 +71,7 @@ const SingleProduct = ({ route }) => {
             <Text style={{ marginRight: 4 }}>
               Availability: {availabilityText}
             </Text>
-            <Text style={{ marginTop: 4 }}>{availability}</Text>
+            <Text style={{ marginTop: 5 }}>{availability}</Text>
           </View>
           <Text>{item.description}</Text>
         </View>

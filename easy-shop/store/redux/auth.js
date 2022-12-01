@@ -20,8 +20,8 @@ const authSlice = createSlice({
       };
     },
     logoutUser: (state) => {
-      AsyncStorage.removeItem("jwt");
       state.currentUser = {};
+      AsyncStorage.removeItem("jwt");
     },
   },
 });

@@ -1,25 +1,68 @@
 import { useState } from "react";
-import { Button, StyleSheet, View } from "react-native";
-import { Select, Box, Center, CheckIcon, Text } from "native-base";
+import { StyleSheet, KeyboardAvoidingView, Platform } from "react-native";
+import {
+  Select,
+  Box,
+  Center,
+  CheckIcon,
+  Text,
+  ScrollView,
+  View,
+} from "native-base";
+import { FormProvider, useForm } from "react-hook-form";
+import LottieView from "lottie-react-native";
+import CreditCardForm, { Button } from "rn-credit-card";
+import EasyButton from "../../../shared/StyledComponents/EasyButton";
+import { useSelector } from "react-redux";
 
 const Payment = ({ route, navigation }) => {
-  const [paymentMethod, setPaymentMethod] = useState();
+  const currentUserID = useSelector(
+    (state) => state.auth.currentUser?.user?.userId
+  );
+  const [paymentInfo, setPaymentInfo] = useState({
+    type: null,
+    values: {},
+  });
   const [cardType, setCardType] = useState();
   const methods = [
     { name: "Cash on Delivery", value: 1 },
     { name: "Card Payment", value: 2 },
   ];
-  const cardTypes = [
-    { name: "Visa", value: 1 },
-    { name: "MasterCard", value: 2 },
-  ];
+
+  const formMethods = useForm({
+    // to trigger the validation on the blur event
+    mode: "onBlur",
+    defaultValues: {
+      holderName: "",
+      cardNumber: "",
+      expiration: "",
+      cvv: "",
+    },
+  });
+
+  const { handleSubmit, formState } = formMethods;
 
   const confirmOrder = () => {
     navigation.navigate("Confirm", {
       order: route.params?.order,
-      payment: { paymentMethod: paymentMethod, cardType: cardType },
+      payment: { paymentInfo: paymentInfo, cardType: cardType },
     });
   };
+
+  const onSubmit = (model) => {
+    navigation.navigate("Confirm", {
+      order: route.params?.order,
+      payment: {
+        paymentInfo: setPaymentInfo({ type: "2", values: model }),
+        cardType: cardType,
+      },
+    });
+  };
+
+  if (!currentUserID) {
+    navigation.replace("MyCart");
+  }
+
   if (route.params === undefined) {
     return (
       <Center mt="1/2">
@@ -28,14 +71,16 @@ const Payment = ({ route, navigation }) => {
     );
   }
   return (
-    <Box>
-      <Box mt={10}>
+    <ScrollView showsVerticalScrollIndicator={false}>
+      <Text fontSize="sm" ml="18%" mt="10">
+        Choose your payment method
+      </Text>
+      <View>
         <Center>
-          <Text fontSize="sm">Choose your payment method</Text>
           <Select
             style={styles.dropdown}
-            selectedValue={paymentMethod}
-            minWidth="300"
+            selectedValue={paymentInfo.type}
+            minWidth="85%"
             accessibilityLabel="Select payment method"
             placeholder="Select payment method"
             placeholderTextColor="coolGray.600"
@@ -44,46 +89,51 @@ const Payment = ({ route, navigation }) => {
               endIcon: <CheckIcon size={3} />,
             }}
             mt={1}
-            onValueChange={(e) => setPaymentMethod(e)}
+            onValueChange={(e) => setPaymentInfo({ type: e, values: {} })}
           >
             {methods.map((m) => (
               <Select.Item key={m.name} label={m.name} value={m.value} />
             ))}
           </Select>
         </Center>
-      </Box>
+      </View>
 
-      {paymentMethod && paymentMethod === 2 && (
-        <Box mt={5}>
-          <Center>
-            <Text fontSize="sm">Choose your card type</Text>
-            <Select
-              style={styles.dropdown}
-              minWidth="300"
-              selectedValue={cardType}
-              accessibilityLabel="Choose card type"
-              placeholder="Choose card type"
-              _selectedItem={{
-                bg: "coolGray.200",
-                endIcon: <CheckIcon size={3} />,
+      {paymentInfo.type && paymentInfo.type === 2 && (
+        <FormProvider {...formMethods}>
+          <KeyboardAvoidingView
+            style={styles.avoider}
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+          >
+            <CreditCardForm
+              LottieView={LottieView}
+              horizontalStart
+              overrides={{
+                labelText: {
+                  marginTop: 16,
+                },
+                inputLabel: {
+                  color: "black",
+                },
               }}
-              onValueChange={(e) => setCardType(e)}
-              mt="1"
-            >
-              {cardTypes.map((ct) => (
-                <Select.Item key={ct.name} label={ct.name} value={ct.value} />
-              ))}
-            </Select>
-          </Center>
-        </Box>
+            />
+          </KeyboardAvoidingView>
+        </FormProvider>
       )}
-      {((paymentMethod && paymentMethod === 1) ||
-        (paymentMethod && paymentMethod === 2 && cardType)) && (
-        <View style={styles.button}>
-          <Button title="Next" onPress={() => confirmOrder()} />
-        </View>
+      {((paymentInfo.type && paymentInfo.type === 1) ||
+        (paymentInfo.type && formState.isValid)) && (
+        <Center mb="10">
+          <EasyButton
+            primary
+            medium
+            onPress={formState.isValid ? handleSubmit(onSubmit) : confirmOrder}
+          >
+            <Text style={{ color: "white" }}>
+              {(formState.isValid && "Confirm") || "Next"}
+            </Text>
+          </EasyButton>
+        </Center>
       )}
-    </Box>
+    </ScrollView>
   );
 };
 
@@ -95,6 +145,10 @@ const styles = StyleSheet.create({
   button: {
     alignItems: "center",
     marginTop: 20,
+  },
+  avoider: {
+    flex: 1,
+    padding: 36,
   },
 });
 

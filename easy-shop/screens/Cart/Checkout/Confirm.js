@@ -1,19 +1,48 @@
-import { View, StyleSheet, Dimensions, ScrollView, Button } from "react-native";
+import { View, StyleSheet, Dimensions, ScrollView } from "react-native";
 import { Center, Text } from "native-base";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import SearchedProduct from "../../../components/Product/SearchedProduct";
 import { clearCart } from "../../../store/redux/cartItem";
+import EasyButton from "../../../shared/StyledComponents/EasyButton";
+import Toast from "react-native-toast-message";
+import axios from "axios";
+import baseURL from "../../../utils/base-url";
 
 var { width, height } = Dimensions.get("window");
 
 const Confirm = ({ route, navigation }) => {
+  const currentUserID = useSelector(
+    (state) => state.auth.currentUser?.user?.userId
+  );
   const order = route.params?.order;
   const dispatch = useDispatch();
 
   const placeOrder = () => {
-    dispatch(clearCart());
-    navigation.navigate("Home");
+    axios
+      .post(`${baseURL}orders`, order)
+      .then((res) => {
+        if (res.status == 200 || res.status == 201) {
+          Toast.show({
+            topOffset: 60,
+            type: "success",
+            text1: "Order Placed",
+          });
+          dispatch(clearCart());
+          navigation.navigate("MyCart");
+        }
+      })
+      .catch((error) => {
+        Toast.show({
+          topOffset: 60,
+          type: "error",
+          text1: "Something went wrong",
+          text2: "Please try again",
+        });
+      });
   };
+  if (!currentUserID) {
+    navigation.replace("MyCart");
+  }
 
   if (route.params === undefined) {
     return (
@@ -40,16 +69,16 @@ const Confirm = ({ route, navigation }) => {
           <Text style={styles.title}>Items:</Text>
           <>
             {order &&
-              JSON.parse(order?.orderItems).map((item) => (
+              order.orderItems.map((item) => (
                 <View key={item.id} style={styles.listItem}>
                   <SearchedProduct item={item.product} />
                 </View>
               ))}
           </>
         </View>
-        <View style={{ alignItems: "center", margin: 20 }}>
-          <Button title={"Place order"} onPress={placeOrder} />
-        </View>
+        <EasyButton primary medium onPress={placeOrder}>
+          <Text style={{ color: "white" }}>Place order</Text>
+        </EasyButton>
       </View>
     </ScrollView>
   );

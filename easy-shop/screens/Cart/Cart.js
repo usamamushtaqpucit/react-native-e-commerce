@@ -3,7 +3,6 @@ import {
   Text,
   View,
   StyleSheet,
-  Button,
   Dimensions,
   TouchableOpacity,
 } from "react-native";
@@ -13,10 +12,12 @@ import { useNavigation } from "@react-navigation/native";
 import Icon from "@expo/vector-icons/FontAwesome";
 import CartItem from "./CartItem";
 import { removeProductFromCart, clearCart } from "../../store/redux/cartItem";
+import EasyButton from "../../shared/StyledComponents/EasyButton";
 
 let { height, width } = Dimensions.get("window");
 
 const Cart = () => {
+  const currentUser = useSelector((state) => state.auth.currentUser);
   const [totalPrice, setTotalPrice] = useState(0);
   const items = useSelector((state) => state.cartItems.values);
   const navigation = useNavigation();
@@ -85,33 +86,29 @@ const Cart = () => {
         </View>
         <View style={styles.buttons}>
           <View style={styles.button}>
-            <Button title="Clear" color="red" onPress={clearCartHandler} />
+            <EasyButton danger medium onPress={clearCartHandler}>
+              <Text style={{ color: "white" }}>Clear</Text>
+            </EasyButton>
           </View>
           <View style={styles.button}>
-            <Button
-              title="Checkout"
-              color="green"
-              onPress={() => {
-                navigation.navigate("Checkout");
-              }}
-            />
+            {currentUser.isAuthenticated ? (
+              <EasyButton
+                primary
+                medium
+                onPress={() => navigation.navigate("Checkout")}
+              >
+                <Text style={{ color: "white" }}>Checkout</Text>
+              </EasyButton>
+            ) : (
+              <EasyButton
+                secondary
+                medium
+                onPress={() => navigation.navigate("User")}
+              >
+                <Text style={{ color: "white" }}>Login</Text>
+              </EasyButton>
+            )}
           </View>
-          {/* <EasyButton
-            primary
-            medium
-            onPress={() => {
-                props.addItemToCart(item.id),
-                Toast.show({
-                    topOffset: 60,
-                    type: "success",
-                    text1: `${item.name} added to Cart`,
-                    text2: "Go to your cart to complete order",
-                });
-                }}
-                >
-                <Text style={{ color:
-                    "white" }}>Add</Text>
-                </EasyButton> */}
         </View>
       </View>
     </View>
@@ -134,22 +131,22 @@ const styles = StyleSheet.create({
     paddingBottom: 25,
   },
   bottomContainer: {
+    width: "70%",
     flexDirection: "row",
     justifyContent: "space-between",
   },
   price: {
     fontSize: 24,
-    margin: 20,
+    marginTop: "15%",
+    marginLeft: "20%",
     color: "red",
   },
   buttons: {
     flexDirection: "row",
-    fontSize: 24,
-    margin: 20,
+    margin: "5%",
   },
   button: {
-    fontSize: 24,
-    marginHorizontal: 4,
+    marginRight: "3%",
   },
   center: {
     justifyContent: "center",

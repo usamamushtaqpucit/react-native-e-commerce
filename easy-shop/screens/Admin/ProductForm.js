@@ -137,7 +137,9 @@ const ProductForm = ({ route, navigation }) => {
     const descriptionIsValid = description.value !== "";
     const categoryIsValid = category.value !== "";
     const countInStockIsValid =
-      +countInStock.value > -1 && +countInStock.value <= 255;
+      +countInStock.value > -1 &&
+      +countInStock.value <= 255 &&
+      countInStock.value !== "";
     if (
       !nameIsValid ||
       !brandIsValid ||
@@ -326,9 +328,11 @@ const ProductForm = ({ route, navigation }) => {
         keyboardType={"numeric"}
         isInvalid={countInStock.isInvalid}
         errorMessage={
-          countInStock.value.length > 0
+          +countInStock.value > -1 && countInStock.value !== ""
             ? "Max 255 items"
-            : "CountInStock Can't blank"
+            : +countInStock.value < 0 && countInStock.value !== ""
+            ? "Min 0 item"
+            : "CountInStock Can't blank and must be an Integer Value"
         }
         onChangeText={(text) =>
           setCountInStock({ value: text, isInvalid: false })
@@ -353,7 +357,10 @@ const ProductForm = ({ route, navigation }) => {
       </View>
       <View style={styles.categoryDropdownContainer}>
         <Select
-          style={styles.categoryDropdown}
+          style={[
+            styles.categoryDropdown,
+            category.isInvalid && { borderColor: "red" },
+          ]}
           selectedValue={pickerValue}
           minWidth="200"
           _selectedItem={{
@@ -372,6 +379,11 @@ const ProductForm = ({ route, navigation }) => {
             <Select.Item key={c.id} label={c.name} value={c.id} />
           ))}
         </Select>
+        {category.isInvalid && (
+          <View style={{ marginTop: 2 }}>
+            <Error message="Category Invalid" />
+          </View>
+        )}
       </View>
 
       {err ? <Error message={err} /> : null}
